@@ -25,7 +25,7 @@ import java.util.List;
 public class MessageService {
 
     private final ThreadRepository threadRepository;
-    //private String groqApiKey = "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";
+
    @Value("${spring.ai.openai.api-key}")
    private String groqApiKey;
 
