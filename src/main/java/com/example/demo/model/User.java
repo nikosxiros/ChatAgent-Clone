@@ -1,13 +1,20 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name="users")
 public class User  implements UserDetails {
@@ -26,7 +33,12 @@ public class User  implements UserDetails {
     @Column(name="password")
     private String password;
 
-    public User() {}
+
+    @JsonBackReference(value ="ChatThread" )
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ChatThread> chatThreads = new ArrayList<>();
+
+
 
     public User(String password, Long id, String name, String email) {
         this.password = password;

@@ -1,13 +1,17 @@
 package com.example.demo.services;
 
 import com.example.demo.exceptions.BootcampException;
+import com.example.demo.model.ChatThread;
 import com.example.demo.model.Message;
+import com.example.demo.model.User;
 import com.example.demo.model.dto.ChatCompletionRequest;
 import com.example.demo.model.dto.ChatCompletionResponse;
 import com.example.demo.model.dto.ChatMessage;
 
 import com.example.demo.repositories.MessageRepository;
+import com.example.demo.repositories.ThreadRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -20,13 +24,16 @@ import java.util.List;
 @Service
 public class MessageService {
 
-private String groqApiKey = "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";
-
+    private final ThreadRepository threadRepository;
+    //private String groqApiKey = "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";
+   @Value("${spring.ai.openai.api-key}")
+   private String groqApiKey;
 
 private MessageRepository messageRepository;
 @Autowired
-public MessageService(MessageRepository messageRepository) {
+public MessageService(MessageRepository messageRepository, ThreadRepository threadRepository) {
     this.messageRepository = messageRepository;
+    this.threadRepository = threadRepository;
 }
 
 
@@ -34,7 +41,6 @@ public MessageService(MessageRepository messageRepository) {
     public Message createMessageAndGetCompletion(Message newMessage){
 
         RestTemplate restTemplate = new RestTemplate();
-
         HttpHeaders headers = new HttpHeaders();
         headers.add("Authorization","Bearer " + groqApiKey);
 
@@ -68,13 +74,29 @@ public MessageService(MessageRepository messageRepository) {
 
         responseMessage.setThreadId(newMessage.getThreadId());
 
+        System.out.println("Auto einai apo to message service to responseMessage.getThreadId(): "+responseMessage.getThreadId());
+
+
+
 
         //save responseMessage in DB
-        messageRepository.save(newMessage);
-        messageRepository.save(responseMessage);
+
+        //messageRepository.save(newMessage);
+        //messageRepository.save(responseMessage);
         //return completion message
 
         return responseMessage;
+    }
+
+
+    public Message saveUserMessageToDB(Message newMessage){
+
+        ChatThread chatThread= threadRepository
+                .findChatThreadById(newMessage.getThreadId().getId())
+                .orElse( new ChatThread());
+            newMessage.setThreadId(chatThread);
+            System.out.println("Auto einai to chatThread sth saveUserMessageToDB methodo: "+chatThread);
+        return messageRepository.save(newMessage);
     }
 
 

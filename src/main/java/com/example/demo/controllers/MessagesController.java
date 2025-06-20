@@ -21,16 +21,29 @@ public class MessagesController {
     }
 
 
+
+
+
     @PostMapping("/messages")
     public Message createMessage(@RequestBody Message message){
         //return response from llm
-        System.out.println(message);
-
-       Message responseMessage = messageService.createMessageAndGetCompletion(message);
-        System.out.println(responseMessage);
+        System.out.println("Auto eiani to message pou stelnw: " + message);
+        Message sendMessage;
+        sendMessage = messageService.saveUserMessageToDB(message);
+        Message answerFromChat;
+         answerFromChat=messageService.createMessageAndGetCompletion(sendMessage);
+         System.out.println("auto einai to answer from chat :  "+ answerFromChat.getContent());
+         messageService.saveUserMessageToDB(answerFromChat);
+        //Message responseMessage = messageService.createMessageAndGetCompletion(message);
+        //System.out.println("H apanthsh apo ton agent: "+responseMessage);
        //return message;
-       return responseMessage;
+       //return responseMessage;
+        return sendMessage;
     }
+
+
+
+
 
     @GetMapping("/messages")
     public List<Message> getAllMessages() throws BootcampException {

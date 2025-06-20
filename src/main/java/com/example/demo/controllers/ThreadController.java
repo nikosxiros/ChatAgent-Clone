@@ -1,12 +1,13 @@
 package com.example.demo.controllers;
 
-import com.example.demo.model.Message;
+import com.example.demo.exceptions.BootcampException;
+import com.example.demo.model.ChatThread;
 import com.example.demo.services.ThreadService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.Optional;
 
 @RestController
 public class ThreadController {
@@ -21,6 +22,25 @@ public class ThreadController {
     }
 
 
+
+
+    @GetMapping(value = "/thread")
+    public ArrayList<ChatThread> getChatThread() throws BootcampException {
+
+        return threadService.getThreadChat();
+    }
+
+    @GetMapping(value = "/thread/{id}")
+    public Optional<ChatThread> getChatThreadById(@PathVariable Long id) throws BootcampException {
+        return threadService.getThreadChatById(id);
+    }
+
+    @PostMapping(value ="/thread")
+    public ChatThread saveThread(@RequestBody ChatThread thread) throws BootcampException {
+
+        threadService.saveThread(thread);
+        return null;
+    }
 
 
 

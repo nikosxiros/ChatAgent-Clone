@@ -1,11 +1,14 @@
 package com.example.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Data
+@ToString(onlyExplicitlyIncluded = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -20,14 +23,20 @@ public class Message {
     @Basic
     @Column(name="message_text")
     public String content;
-    @Basic
-    @Column(name="thread_id")
-    public Long threadId;
+
+
+    @JsonBackReference(value = "ChatThread")
+    @ManyToOne(optional = false)
+    @JoinColumn(name="thread_id")
+    public ChatThread threadId;
+
+
     @Basic
     @Column(name="sender_is_user")
     public Boolean isCompletion;
 
     public String completionModel="llama3-8b-8192";
+
 
 
 

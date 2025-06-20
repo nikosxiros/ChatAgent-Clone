@@ -96,7 +96,7 @@ export default function ChatPage() {
 
         const userMessage = {
             content: messageToAgent,
-            threadId: 3,
+            threadId: { id: 1 },
             isCompletion: false,
             completionModel: "llama3-8b-8192",
         };
@@ -105,7 +105,7 @@ export default function ChatPage() {
 
             setMessages((prev) => [...prev, userMessage]);
 
-
+            console.log("prin to requesst: ",userMessage)
             await axios.post("http://localhost:8080/messages", userMessage, {
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -122,6 +122,8 @@ export default function ChatPage() {
             setMessages(response.data);
         } catch (e) {
             console.error("failed to send-receive messages", e);
+            console.error('Status', e.response?.status);
+            console.error('Response data', e.response?.data);
         }
 
         setMessageToAgent("");
