@@ -16,7 +16,8 @@ public interface ThreadRepository extends JpaRepository<ChatThread, Long> {
     Optional<ChatThread> findChatThreadById(Long id);
 
 
-
+    @Query(nativeQuery = true, value = " select * from thread where user_id =?1")
+    List<ChatThread> userThreads(Long id);
 
 
 

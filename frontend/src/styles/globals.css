@@ -280,3 +280,9 @@ footer {
     text-align: center;
     padding: 1rem;
 }
+
+
+.threads-list {
+    height: calc(100vh - 100px); /* adjust for header/footer */
+    overflow-y: auto;
+}

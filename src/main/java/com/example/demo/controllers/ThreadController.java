@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -38,11 +39,17 @@ public class ThreadController {
     @PostMapping(value ="/thread")
     public ChatThread saveThread(@RequestBody ChatThread thread) throws BootcampException {
 
-        threadService.saveThread(thread);
-        return null;
+        return threadService.saveThread(thread);
+
     }
 
 
+
+
+    @GetMapping(value = "/thread/user/{user_id}")
+    public List<ChatThread> getUserThreads(@PathVariable Long user_id) throws BootcampException {
+        return threadService.userThread(user_id);
+    }
 
 
 

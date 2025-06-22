@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -39,5 +40,10 @@ public class ThreadService {
         return repo.save(thread);
     }
 
+
+
+    public List<ChatThread> userThread(Long id) throws BootcampException {
+        return repo.userThreads(id);
+    }
 
 }
